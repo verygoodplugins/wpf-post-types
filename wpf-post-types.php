@@ -9,46 +9,6 @@ Author: Very Good Plugins
 Author URI: https://verygoodplugins.com/
 */
 
-function wpf_post_types_tags_modified( $user_id, $user_tags ) {
-
-	// Don't run for admins
-	if ( user_can( $user_id, 'manage_options' ) ) {
-		return;
-	}
-
-	$settings = get_option( 'wpf_post_types_settings', array() );
-
-	$user = get_user_by( 'id', $user_id );
-
-	foreach ( $settings as $role_slug => $setting ) {
-
-		if ( empty( $setting['tag_link'] ) ) {
-			continue;
-		}
-
-		$result = array_intersect( $user_tags, $setting['tag_link'] );
-
-		if ( ! empty( $result ) && ! in_array( $role_slug, $user->roles ) ) {
-
-			wp_fusion()->logger->handle( 'info', $user_id, 'Changing user role to <strong>' . $role_slug . '</strong> from linked tag <strong>' . $setting['tag_link'][0] . '</strong>' );
-
-			remove_action( 'profile_update', array( wp_fusion()->user, 'profile_update' ), 10, 2 );
-
-			wp_update_user(
-				array(
-					'ID'   => $user_id,
-					'role' => $role_slug,
-				)
-			);
-			return;
-
-		}
-	}
-
-}
-
-add_action( 'wpf_tags_modified', 'wpf_post_types_tags_modified', 10, 2 );
-
 function wpf_post_types_admin_menu() {
 
 	$id = add_submenu_page(
