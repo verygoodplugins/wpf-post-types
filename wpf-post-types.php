@@ -88,7 +88,7 @@ function wpf_post_types_render_admin_menu() {
 
 			?>
 
-			<table class="table table-hover" style="max-width: 1200px;">
+			<table class="table table-hover wpf-settings-table" style="max-width: 1200px;">
 				<thead>
 				<tr>
 					<th>Post Type</th>
